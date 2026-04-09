@@ -6,7 +6,7 @@
 <title>1주택자 청약 안전마진 대시보드</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#080c12;color:#dde4f0;font-family:'Noto Sans KR',sans-serif;min-height:100vh}
+body{background:#080c12;color:#dde4f0;font-family:'Noto Sans KR','Apple SD Gothic Neo',sans-serif;min-height:100vh}
 .bg{position:fixed;inset:0;opacity:.03;pointer-events:none;background-image:linear-gradient(rgba(0,255,135,1) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,135,1) 1px,transparent 1px);background-size:48px 48px}
 .wrap{max-width:1080px;margin:0 auto;padding:28px 16px;position:relative;z-index:1}
 .htop{display:flex;align-items:center;gap:10px;margin-bottom:6px}
@@ -37,9 +37,7 @@ body{background:#080c12;color:#dde4f0;font-family:'Noto Sans KR',sans-serif;min-
 .bhot{background:rgba(255,68,68,.12);color:#ff7777;border:1px solid rgba(255,68,68,.25)}
 .bsafe{background:rgba(0,255,135,.1);color:#00ff87;border:1px solid rgba(0,255,135,.25)}
 .bst{background:rgba(125,249,255,.07);color:#7df9ff;border:1px solid rgba(125,249,255,.18)}
-.atabs{display:flex;gap:3px;margin-bottom:10px;background:rgba(0,0,0,.3);border-radius:7px;padding:3px}
-.atab{flex:1;padding:5px;border-radius:5px;border:none;cursor:pointer;font-size:10px;font-weight:700;font-family:inherit;background:transparent;color:#555;transition:all .15s}
-.atab.on{background:rgba(125,249,255,.14);color:#7df9ff}
+.bon{background:rgba(0,255,135,.15);color:#00ff87;border:1px solid rgba(0,255,135,.4)}
 .pgrid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px}
 .pbox{background:rgba(0,0,0,.3);border-radius:9px;padding:9px}
 .plbl{font-size:9px;color:#555;margin-bottom:2px}
@@ -67,25 +65,26 @@ body{background:#080c12;color:#dde4f0;font-family:'Noto Sans KR',sans-serif;min-
 .nodata{text-align:center;padding:60px;color:#444}
 .footer{text-align:center;font-size:10px;color:#333;line-height:1.8;padding:14px;background:rgba(255,255,255,.01);border-radius:9px;border:1px solid rgba(255,255,255,.04)}
 .footer a{color:#7df9ff;text-decoration:none}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-thumb{background:rgba(125,249,255,.15);border-radius:3px}
 </style>
 </head>
-
-  <body>
+<body>
 <div class="bg"></div>
 <div class="wrap">
   <div class="htop">
     <div class="icon">&#127970;</div>
     <div>
-      <div class="sublabel">AUTO UPDATE - 공공데이터포털 API</div>
+      <div class="sublabel">AUTO UPDATE - 청약홈 실시간</div>
       <div class="title">1주택자 청약 안전마진 대시보드</div>
     </div>
   </div>
-  <div class="meta">&#128197; 마지막 업데이트: 2026.04.09 07:04 <span class="blive">매일 오전 8시 자동갱신</span></div>
+  <div class="meta">&#128197; 마지막 업데이트: 2026.04.09 07:10 <span class="blive">매일 오전 8시 자동갱신</span></div>
   <div class="stats">
-    <div class="sc"><div class="sl">수집된 단지</div><div class="sv" id="s1" style="color:#00ff87">-</div><div class="ss">추첨물량 있는 단지</div></div>
-    <div class="sc"><div class="sl">평균 안전마진</div><div class="sv" id="s2" style="color:#7df9ff">-</div><div class="ss">시세 입력 단지 기준</div></div>
-    <div class="sc"><div class="sl">마진 플러스</div><div class="sv" id="s3" style="color:#ffd700">-</div><div class="ss">시세 이하 분양 단지</div></div>
-    <div class="sc"><div class="sl">총 추첨 물량</div><div class="sv" id="s4" style="color:#ff9500">-</div><div class="ss">1주택자 청약 가능</div></div>
+    <div class="sc"><div class="sl">수집된 단지</div><div class="sv" id="s1" style="color:#00ff87">-</div><div class="ss">청약홈 전체 단지</div></div>
+    <div class="sc"><div class="sl">진행중</div><div class="sv" id="s2" style="color:#7df9ff">-</div><div class="ss">지금 청약 가능</div></div>
+    <div class="sc"><div class="sl">마진 플러스</div><div class="sv" id="s3" style="color:#ffd700">-</div><div class="ss">시세 입력 후 계산</div></div>
+    <div class="sc"><div class="sl">서울 단지</div><div class="sv" id="s4" style="color:#ff9500">-</div><div class="ss">서울 청약 단지</div></div>
   </div>
   <div class="infobar">
     <div class="ii"><span style="font-size:18px">&#127968;</span><div><div style="font-size:9px;color:#777">1주택자 가능 물량</div><div style="font-size:11px;font-weight:700;color:#7df9ff">추첨제 물량만 청약 가능</div></div></div>
@@ -98,70 +97,105 @@ body{background:#080c12;color:#dde4f0;font-family:'Noto Sans KR',sans-serif;min-
     <button class="fb" onclick="setR('서울',this)">서울</button>
     <button class="fb" onclick="setR('경기',this)">경기</button>
     <button class="fb" onclick="setR('지방',this)">지방</button>
-    <span style="margin-left:auto;font-size:10px;color:#444">안전마진 높은 순</span>
+    <button class="fb" onclick="setR('진행중',this)">진행중만</button>
+    <span style="margin-left:auto;font-size:10px;color:#444">최신순</span>
   </div>
   <div class="grid" id="cards"></div>
   <div class="footer">
-    공공데이터포털 한국부동산원 청약정보 API 기반 &middot;
+    청약홈(applyhome.co.kr) 실시간 데이터 기반 &middot;
     실제 청약 전 <a href="https://www.applyhome.co.kr" target="_blank">청약홈</a> 공고문 원문을 반드시 확인하세요
   </div>
 </div>
-
-
 <script>
-var RAW=[{"id": "옥정중앙역 대방 디에트르(중상1, 복합1BL)_20260420", "name": "옥정중앙역 대방 디에트르(중상1, 복합1BL)", "location": "", "region": "경기", "supplyCount": "", "recruitDate": "20260420", "recruitEndDate": "20260422", "winnerDate": "20260428", "moveInDate": "", "constructor": "대방건설 주식회사", "status": "예정", "type59": null, "type84": null}, {"id": "야목역 서희스타힐스 그랜드힐_20260416", "name": "야목역 서희스타힐스 그랜드힐", "location": "", "region": "경기", "supplyCount": "", "recruitDate": "20260416", "recruitEndDate": "20260420", "winnerDate": "20260424", "moveInDate": "", "constructor": "(주)서희건설", "status": "예정", "type59": null, "type84": null}, {"id": "온천장 하늘채 엘리시움_20260413", "name": "온천장 하늘채 엘리시움", "location": "", "region": "부산", "supplyCount": "", "recruitDate": "20260413", "recruitEndDate": "20260415", "winnerDate": "20260421", "moveInDate": "", "constructor": "코오롱글로벌(주)", "status": "예정", "type59": null, "type84": null}, {"id": "라클라체자이드파인_20260413", "name": "라클라체자이드파인", "location": "", "region": "서울", "supplyCount": "", "recruitDate": "20260413", "recruitEndDate": "20260416", "winnerDate": "20260422", "moveInDate": "", "constructor": "지에스건설(주), 에스케이에코플랜트 주식회사", "status": "예정", "type59": null, "type84": null}, {"id": "업성 푸르지오 레이크시티_20260413", "name": "업성 푸르지오 레이크시티", "location": "", "region": "충남", "supplyCount": "", "recruitDate": "20260413", "recruitEndDate": "20260415", "winnerDate": "20260422", "moveInDate": "", "constructor": "(주)대우건설", "status": "예정", "type59": null, "type84": null}, {"id": "북전주 광신프로그레스_20260413", "name": "북전주 광신프로그레스", "location": "", "region": "전북", "supplyCount": "", "recruitDate": "20260413", "recruitEndDate": "20260415", "winnerDate": "20260422", "moveInDate": "", "constructor": "(주)광신종합건설, (주)광신토건", "status": "예정", "type59": null, "type84": null}, {"id": "풍무역세권 수자인 그라센트 2차_20260413", "name": "풍무역세권 수자인 그라센트 2차", "location": "", "region": "경기", "supplyCount": "", "recruitDate": "20260413", "recruitEndDate": "20260415", "winnerDate": "20260421", "moveInDate": "", "constructor": "(주)비에스한양", "status": "예정", "type59": null, "type84": null}, {"id": "르네오션 고성 퍼스트뷰_20260413", "name": "르네오션 고성 퍼스트뷰", "location": "", "region": "강원", "supplyCount": "", "recruitDate": "20260413", "recruitEndDate": "20260415", "winnerDate": "20260421", "moveInDate": "", "constructor": "금강종합건설(주)", "status": "예정", "type59": null, "type84": null}, {"id": "오티에르 반포_20260410", "name": "오티에르 반포", "location": "", "region": "서울", "supplyCount": "", "recruitDate": "20260410", "recruitEndDate": "20260415", "winnerDate": "20260421", "moveInDate": "", "constructor": "㈜포스코이앤씨", "status": "예정", "type59": null, "type84": null}, {"id": "이촌 르엘_20260409", "name": "이촌 르엘", "location": "", "region": "서울", "supplyCount": "", "recruitDate": "20260409", "recruitEndDate": "20260414", "winnerDate": "20260420", "moveInDate": "", "constructor": "롯데건설 주식회사", "status": "진행중", "type59": null, "type84": null}, {"id": "구서 다움포레_20260409", "name": "구서 다움포레", "location": "", "region": "부산", "supplyCount": "", "recruitDate": "20260409", "recruitEndDate": "20260413", "winnerDate": "20260417", "moveInDate": "", "constructor": "비엠산업개발주식회사", "status": "진행중", "type59": null, "type84": null}, {"id": "천안 동일하이빌 파크레인_20260401", "name": "천안 동일하이빌 파크레인", "location": "", "region": "충남", "supplyCount": "", "recruitDate": "20260401", "recruitEndDate": "20260403", "winnerDate": "20260409", "moveInDate": "", "constructor": "(주)동일토건", "status": "예정", "type59": null, "type84": null}, {"id": "엄궁역 트라비스 하늘채_20260406", "name": "엄궁역 트라비스 하늘채", "location": "", "region": "부산", "supplyCount": "", "recruitDate": "20260406", "recruitEndDate": "20260408", "winnerDate": "20260414", "moveInDate": "", "constructor": "코오롱글로벌주식회사", "status": "예정", "type59": null, "type84": null}, {"id": "힐스테이트 안양펠루스_20260406", "name": "힐스테이트 안양펠루스", "location": "", "region": "경기", "supplyCount": "", "recruitDate": "20260406", "recruitEndDate": "20260408", "winnerDate": "20260414", "moveInDate": "", "constructor": "현대건설(주)", "status": "예정", "type59": null, "type84": null}, {"id": "검단호수공원역 파라곤(AA36BL)_20260406", "name": "검단호수공원역 파라곤(AA36BL)", "location": "", "region": "인천", "supplyCount": "", "recruitDate": "20260406", "recruitEndDate": "20260408", "winnerDate": "20260414", "moveInDate": "", "constructor": "(주)동양건설산업", "status": "예정", "type59": null, "type84": null}, {"id": "중앙하이츠 갈산역 센트럴_20260406", "name": "중앙하이츠 갈산역 센트럴", "location": "", "region": "인천", "supplyCount": "", "recruitDate": "20260406", "recruitEndDate": "20260408", "winnerDate": "20260415", "moveInDate": "", "constructor": "씨에이이앤씨 주식회사", "status": "예정", "type59": null, "type84": null}, {"id": "범어역 파크드림 디아르_20260406", "name": "범어역 파크드림 디아르", "location": "", "region": "대구", "supplyCount": "", "recruitDate": "20260406", "recruitEndDate": "20260408", "winnerDate": "20260414", "moveInDate": "", "constructor": "에이치에스화성주식회사", "status": "예정", "type59": null, "type84": null}, {"id": "경성대부경대역 비스타동원 더 프리미엄_20260406", "name": "경성대부경대역 비스타동원 더 프리미엄", "location": "", "region": "부산", "supplyCount": "", "recruitDate": "20260406", "recruitEndDate": "20260408", "winnerDate": "20260414", "moveInDate": "", "constructor": "(주)동원개발", "status": "예정", "type59": null, "type84": null}, {"id": "의정부역 센트럴 아이파크_20260407", "name": "의정부역 센트럴 아이파크", "location": "", "region": "경기", "supplyCount": "", "recruitDate": "20260407", "recruitEndDate": "20260409", "winnerDate": "20260415", "moveInDate": "", "constructor": "에이치디씨현대산업개발(주)", "status": "진행중", "type59": null, "type84": null}, {"id": "선운지구다사로움 공가세대 일반공급_20260403", "name": "선운지구다사로움 공가세대 일반공급", "location": "", "region": "광주", "supplyCount": "", "recruitDate": "20260403", "recruitEndDate": "20260406", "winnerDate": "20260410", "moveInDate": "", "constructor": "제일건설 주식회사", "status": "예정", "type59": null, "type84": null}, {"id": "창원자이 더 스카이_20260330", "name": "창원자이 더 스카이", "location": "", "region": "경남", "supplyCount": "", "recruitDate": "20260330", "recruitEndDate": "20260401", "winnerDate": "20260407", "moveInDate": "", "constructor": "지에스건설(주)", "status": "예정", "type59": null, "type84": null}, {"id": "한화포레나 부산당리_20260330", "name": "한화포레나 부산당리", "location": "", "region": "부산", "supplyCount": "", "recruitDate": "20260330", "recruitEndDate": "20260401", "winnerDate": "20260407", "moveInDate": "", "constructor": "(주)한화 건설부문", "status": "예정", "type59": null, "type84": null}, {"id": "더샵 신길센트럴시티_20260330", "name": "더샵 신길센트럴시티", "location": "", "region": "서울", "supplyCount": "", "recruitDate": "20260330", "recruitEndDate": "20260402", "winnerDate": "20260409", "moveInDate": "", "constructor": "(주) 포스코이앤씨", "status": "예정", "type59": null, "type84": null}, {"id": "아산탕정자이 메트로시티(A3BL)_20260331", "name": "아산탕정자이 메트로시티(A3BL)", "location": "", "region": "충남", "supplyCount": "", "recruitDate": "20260331", "recruitEndDate": "20260402", "winnerDate": "20260408", "moveInDate": "", "constructor": "지에스건설(주)", "status": "예정", "type59": null, "type84": null}, {"id": "대전 롯데캐슬 더퍼스트(조합원 취소분)_20260325", "name": "대전 롯데캐슬 더퍼스트(조합원 취소분)", "location": "", "region": "대전", "supplyCount": "", "recruitDate": "20260325", "recruitEndDate": "20260327", "winnerDate": "20260402", "moveInDate": "", "constructor": "롯데건설(주)", "status": "예정", "type59": null, "type84": null}, {"id": "아크로 드 서초_20260331", "name": "아크로 드 서초", "location": "", "region": "서울", "supplyCount": "", "recruitDate": "20260331", "recruitEndDate": "20260403", "winnerDate": "20260409", "moveInDate": "", "constructor": "디엘이앤씨 주식회사", "status": "예정", "type59": null, "type84": null}, {"id": "오션포레베네스트하우스(미단시티 공동8BL)_20260330", "name": "오션포레베네스트하우스(미단시티 공동8BL)", "location": "", "region": "인천", "supplyCount": "", "recruitDate": "20260330", "recruitEndDate": "20260401", "winnerDate": "20260407", "moveInDate": "", "constructor": "동원건설산업주식회사", "status": "예정", "type59": null, "type84": null}, {"id": "에코델타시티 엘가 로제비앙_20260326", "name": "에코델타시티 엘가 로제비앙", "location": "", "region": "부산", "supplyCount": "", "recruitDate": "20260326", "recruitEndDate": "20260330", "winnerDate": "20260403", "moveInDate": "", "constructor": "모아건설산업(주), 로제비앙건설 주식회사", "status": "예정", "type59": null, "type84": null}, {"id": "시흥거모B1 호반써밋_20260323", "name": "시흥거모B1 호반써밋", "location": "", "region": "경기", "supplyCount": "", "recruitDate": "20260323", "recruitEndDate": "20260325", "winnerDate": "20260331", "moveInDate": "", "constructor": "(주)호반건설", "status": "예정", "type59": null, "type84": null}, {"id": "용인 플랫폼시티 라온프라이빗 아르디에_20260323", "name": "용인 플랫폼시티 라온프라이빗 아르디에", "location": "", "region": "경기", "supplyCount": "", "recruitDate": "20260323", "recruitEndDate": "20260325", "winnerDate": "20260401", "moveInDate": "", "constructor": "라온건설(주)", "status": "예정", "type59": null, "type84": null}];
+var RAW=[{"id": "옥정중앙역 대방 디에트르(중상1, 복합1BL)20260420", "name": "옥정중앙역 대방 디에트르(중상1, 복합1BL)", "location": "", "region": "경기", "supplyCount": "", "recruitDate": "20260420", "recruitEndDate": "20260422", "winnerDate": "20260428", "moveInDate": "", "constructor": "대방건설 주식회사", "status": "예정", "type59": null, "type84": null}, {"id": "야목역 서희스타힐스 그랜드힐20260416", "name": "야목역 서희스타힐스 그랜드힐", "location": "", "region": "경기", "supplyCount": "", "recruitDate": "20260416", "recruitEndDate": "20260420", "winnerDate": "20260424", "moveInDate": "", "constructor": "(주)서희건설", "status": "예정", "type59": null, "type84": null}, {"id": "온천장 하늘채 엘리시움20260413", "name": "온천장 하늘채 엘리시움", "location": "", "region": "부산", "supplyCount": "", "recruitDate": "20260413", "recruitEndDate": "20260415", "winnerDate": "20260421", "moveInDate": "", "constructor": "코오롱글로벌(주)", "status": "예정", "type59": null, "type84": null}, {"id": "라클라체자이드파인20260413", "name": "라클라체자이드파인", "location": "", "region": "서울", "supplyCount": "", "recruitDate": "20260413", "recruitEndDate": "20260416", "winnerDate": "20260422", "moveInDate": "", "constructor": "지에스건설(주), 에스케이에코플랜트 주식회사", "status": "예정", "type59": null, "type84": null}, {"id": "업성 푸르지오 레이크시티20260413", "name": "업성 푸르지오 레이크시티", "location": "", "region": "충남", "supplyCount": "", "recruitDate": "20260413", "recruitEndDate": "20260415", "winnerDate": "20260422", "moveInDate": "", "constructor": "(주)대우건설", "status": "예정", "type59": null, "type84": null}, {"id": "북전주 광신프로그레스20260413", "name": "북전주 광신프로그레스", "location": "", "region": "전북", "supplyCount": "", "recruitDate": "20260413", "recruitEndDate": "20260415", "winnerDate": "20260422", "moveInDate": "", "constructor": "(주)광신종합건설, (주)광신토건", "status": "예정", "type59": null, "type84": null}, {"id": "풍무역세권 수자인 그라센트 2차20260413", "name": "풍무역세권 수자인 그라센트 2차", "location": "", "region": "경기", "supplyCount": "", "recruitDate": "20260413", "recruitEndDate": "20260415", "winnerDate": "20260421", "moveInDate": "", "constructor": "(주)비에스한양", "status": "예정", "type59": null, "type84": null}, {"id": "르네오션 고성 퍼스트뷰20260413", "name": "르네오션 고성 퍼스트뷰", "location": "", "region": "강원", "supplyCount": "", "recruitDate": "20260413", "recruitEndDate": "20260415", "winnerDate": "20260421", "moveInDate": "", "constructor": "금강종합건설(주)", "status": "예정", "type59": null, "type84": null}, {"id": "오티에르 반포20260410", "name": "오티에르 반포", "location": "", "region": "서울", "supplyCount": "", "recruitDate": "20260410", "recruitEndDate": "20260415", "winnerDate": "20260421", "moveInDate": "", "constructor": "㈜포스코이앤씨", "status": "예정", "type59": null, "type84": null}, {"id": "이촌 르엘20260409", "name": "이촌 르엘", "location": "", "region": "서울", "supplyCount": "", "recruitDate": "20260409", "recruitEndDate": "20260414", "winnerDate": "20260420", "moveInDate": "", "constructor": "롯데건설 주식회사", "status": "진행중", "type59": null, "type84": null}, {"id": "구서 다움포레20260409", "name": "구서 다움포레", "location": "", "region": "부산", "supplyCount": "", "recruitDate": "20260409", "recruitEndDate": "20260413", "winnerDate": "20260417", "moveInDate": "", "constructor": "비엠산업개발주식회사", "status": "진행중", "type59": null, "type84": null}, {"id": "천안 동일하이빌 파크레인20260401", "name": "천안 동일하이빌 파크레인", "location": "", "region": "충남", "supplyCount": "", "recruitDate": "20260401", "recruitEndDate": "20260403", "winnerDate": "20260409", "moveInDate": "", "constructor": "(주)동일토건", "status": "예정", "type59": null, "type84": null}, {"id": "엄궁역 트라비스 하늘채20260406", "name": "엄궁역 트라비스 하늘채", "location": "", "region": "부산", "supplyCount": "", "recruitDate": "20260406", "recruitEndDate": "20260408", "winnerDate": "20260414", "moveInDate": "", "constructor": "코오롱글로벌주식회사", "status": "예정", "type59": null, "type84": null}, {"id": "힐스테이트 안양펠루스20260406", "name": "힐스테이트 안양펠루스", "location": "", "region": "경기", "supplyCount": "", "recruitDate": "20260406", "recruitEndDate": "20260408", "winnerDate": "20260414", "moveInDate": "", "constructor": "현대건설(주)", "status": "예정", "type59": null, "type84": null}, {"id": "검단호수공원역 파라곤(AA36BL)20260406", "name": "검단호수공원역 파라곤(AA36BL)", "location": "", "region": "인천", "supplyCount": "", "recruitDate": "20260406", "recruitEndDate": "20260408", "winnerDate": "20260414", "moveInDate": "", "constructor": "(주)동양건설산업", "status": "예정", "type59": null, "type84": null}, {"id": "중앙하이츠 갈산역 센트럴20260406", "name": "중앙하이츠 갈산역 센트럴", "location": "", "region": "인천", "supplyCount": "", "recruitDate": "20260406", "recruitEndDate": "20260408", "winnerDate": "20260415", "moveInDate": "", "constructor": "씨에이이앤씨 주식회사", "status": "예정", "type59": null, "type84": null}, {"id": "범어역 파크드림 디아르20260406", "name": "범어역 파크드림 디아르", "location": "", "region": "대구", "supplyCount": "", "recruitDate": "20260406", "recruitEndDate": "20260408", "winnerDate": "20260414", "moveInDate": "", "constructor": "에이치에스화성주식회사", "status": "예정", "type59": null, "type84": null}, {"id": "경성대부경대역 비스타동원 더 프리미엄20260406", "name": "경성대부경대역 비스타동원 더 프리미엄", "location": "", "region": "부산", "supplyCount": "", "recruitDate": "20260406", "recruitEndDate": "20260408", "winnerDate": "20260414", "moveInDate": "", "constructor": "(주)동원개발", "status": "예정", "type59": null, "type84": null}, {"id": "의정부역 센트럴 아이파크20260407", "name": "의정부역 센트럴 아이파크", "location": "", "region": "경기", "supplyCount": "", "recruitDate": "20260407", "recruitEndDate": "20260409", "winnerDate": "20260415", "moveInDate": "", "constructor": "에이치디씨현대산업개발(주)", "status": "진행중", "type59": null, "type84": null}, {"id": "선운지구다사로움 공가세대 일반공급20260403", "name": "선운지구다사로움 공가세대 일반공급", "location": "", "region": "광주", "supplyCount": "", "recruitDate": "20260403", "recruitEndDate": "20260406", "winnerDate": "20260410", "moveInDate": "", "constructor": "제일건설 주식회사", "status": "예정", "type59": null, "type84": null}, {"id": "창원자이 더 스카이20260330", "name": "창원자이 더 스카이", "location": "", "region": "경남", "supplyCount": "", "recruitDate": "20260330", "recruitEndDate": "20260401", "winnerDate": "20260407", "moveInDate": "", "constructor": "지에스건설(주)", "status": "예정", "type59": null, "type84": null}, {"id": "한화포레나 부산당리20260330", "name": "한화포레나 부산당리", "location": "", "region": "부산", "supplyCount": "", "recruitDate": "20260330", "recruitEndDate": "20260401", "winnerDate": "20260407", "moveInDate": "", "constructor": "(주)한화 건설부문", "status": "예정", "type59": null, "type84": null}, {"id": "더샵 신길센트럴시티20260330", "name": "더샵 신길센트럴시티", "location": "", "region": "서울", "supplyCount": "", "recruitDate": "20260330", "recruitEndDate": "20260402", "winnerDate": "20260409", "moveInDate": "", "constructor": "(주) 포스코이앤씨", "status": "예정", "type59": null, "type84": null}, {"id": "아산탕정자이 메트로시티(A3BL)20260331", "name": "아산탕정자이 메트로시티(A3BL)", "location": "", "region": "충남", "supplyCount": "", "recruitDate": "20260331", "recruitEndDate": "20260402", "winnerDate": "20260408", "moveInDate": "", "constructor": "지에스건설(주)", "status": "예정", "type59": null, "type84": null}, {"id": "대전 롯데캐슬 더퍼스트(조합원 취소분)20260325", "name": "대전 롯데캐슬 더퍼스트(조합원 취소분)", "location": "", "region": "대전", "supplyCount": "", "recruitDate": "20260325", "recruitEndDate": "20260327", "winnerDate": "20260402", "moveInDate": "", "constructor": "롯데건설(주)", "status": "예정", "type59": null, "type84": null}, {"id": "아크로 드 서초20260331", "name": "아크로 드 서초", "location": "", "region": "서울", "supplyCount": "", "recruitDate": "20260331", "recruitEndDate": "20260403", "winnerDate": "20260409", "moveInDate": "", "constructor": "디엘이앤씨 주식회사", "status": "예정", "type59": null, "type84": null}, {"id": "오션포레베네스트하우스(미단시티 공동8BL)20260330", "name": "오션포레베네스트하우스(미단시티 공동8BL)", "location": "", "region": "인천", "supplyCount": "", "recruitDate": "20260330", "recruitEndDate": "20260401", "winnerDate": "20260407", "moveInDate": "", "constructor": "동원건설산업주식회사", "status": "예정", "type59": null, "type84": null}, {"id": "에코델타시티 엘가 로제비앙20260326", "name": "에코델타시티 엘가 로제비앙", "location": "", "region": "부산", "supplyCount": "", "recruitDate": "20260326", "recruitEndDate": "20260330", "winnerDate": "20260403", "moveInDate": "", "constructor": "모아건설산업(주), 로제비앙건설 주식회사", "status": "예정", "type59": null, "type84": null}, {"id": "시흥거모B1 호반써밋20260323", "name": "시흥거모B1 호반써밋", "location": "", "region": "경기", "supplyCount": "", "recruitDate": "20260323", "recruitEndDate": "20260325", "winnerDate": "20260331", "moveInDate": "", "constructor": "(주)호반건설", "status": "예정", "type59": null, "type84": null}, {"id": "용인 플랫폼시티 라온프라이빗 아르디에20260323", "name": "용인 플랫폼시티 라온프라이빗 아르디에", "location": "", "region": "경기", "supplyCount": "", "recruitDate": "20260323", "recruitEndDate": "20260325", "winnerDate": "20260401", "moveInDate": "", "constructor": "라온건설(주)", "status": "예정", "type59": null, "type84": null}, {"id": "해링턴플레이스 오룡역20260323", "name": "해링턴플레이스 오룡역", "location": "", "region": "대전", "supplyCount": "", "recruitDate": "20260323", "recruitEndDate": "20260325", "winnerDate": "20260331", "moveInDate": "", "constructor": "진흥기업(주)", "status": "예정", "type59": null, "type84": null}, {"id": "무등산 더힐(조합원 취소분)20260323", "name": "무등산 더힐(조합원 취소분)", "location": "", "region": "광주", "supplyCount": "", "recruitDate": "20260323", "recruitEndDate": "20260324", "winnerDate": "20260330", "moveInDate": "", "constructor": "티에이치건설 주식회사", "status": "예정", "type59": null, "type84": null}, {"id": "더샵 프리엘라20260323", "name": "더샵 프리엘라", "location": "", "region": "서울", "supplyCount": "", "recruitDate": "20260323", "recruitEndDate": "20260326", "winnerDate": "20260401", "moveInDate": "", "constructor": "포스코이앤씨", "status": "예정", "type59": null, "type84": null}, {"id": "상주자이르네20260316", "name": "상주자이르네", "location": "", "region": "경북", "supplyCount": "", "recruitDate": "20260316", "recruitEndDate": "20260318", "winnerDate": "20260324", "moveInDate": "", "constructor": "자이에스앤디(주)", "status": "예정", "type59": null, "type84": null}, {"id": "부천역 에피트 어바닉20260316", "name": "부천역 에피트 어바닉", "location": "", "region": "경기", "supplyCount": "", "recruitDate": "20260316", "recruitEndDate": "20260318", "winnerDate": "20260324", "moveInDate": "", "constructor": "에이치엘디앤아이한라", "status": "예정", "type59": null, "type84": null}, {"id": "래미안 엘라비네20260316", "name": "래미안 엘라비네", "location": "", "region": "서울", "supplyCount": "", "recruitDate": "20260316", "recruitEndDate": "20260319", "winnerDate": "20260325", "moveInDate": "", "constructor": "삼성물산(주)", "status": "예정", "type59": null, "type84": null}, {"id": "e편한세상 여수 글렌츠20260316", "name": "e편한세상 여수 글렌츠", "location": "", "region": "전남", "supplyCount": "", "recruitDate": "20260316", "recruitEndDate": "20260318", "winnerDate": "20260324", "moveInDate": "", "constructor": "디엘이앤씨(주)", "status": "예정", "type59": null, "type84": null}, {"id": "썬밸리 오드카운티 가평설악20260318", "name": "썬밸리 오드카운티 가평설악", "location": "", "region": "경기", "supplyCount": "", "recruitDate": "20260318", "recruitEndDate": "20260320", "winnerDate": "20260326", "moveInDate": "", "constructor": "동광종합토건(주)", "status": "예정", "type59": null, "type84": null}, {"id": "변동 동건아파트 우선분양전환 후 잔여세대20260316", "name": "변동 동건아파트 우선분양전환 후 잔여세대", "location": "", "region": "대전", "supplyCount": "", "recruitDate": "20260316", "recruitEndDate": "20260317", "winnerDate": "20260323", "moveInDate": "", "constructor": "동건종합건설(주)", "status": "예정", "type59": null, "type84": null}, {"id": "연수 월드메르디앙 어반포레20260313", "name": "연수 월드메르디앙 어반포레", "location": "", "region": "인천", "supplyCount": "", "recruitDate": "20260313", "recruitEndDate": "20260317", "winnerDate": "20260323", "moveInDate": "", "constructor": "신성종합건설(주)", "status": "예정", "type59": null, "type84": null}, {"id": "마곡지구 17단지 토지임대부(본청약)20260312", "name": "마곡지구 17단지 토지임대부(본청약)", "location": "", "region": "서울", "supplyCount": "", "recruitDate": "20260312", "recruitEndDate": "20260318", "winnerDate": "20260402", "moveInDate": "", "constructor": "이수건설(주)", "status": "예정", "type59": null, "type84": null}, {"id": "두산위브 더센트럴 수원20260309", "name": "두산위브 더센트럴 수원", "location": "", "region": "경기", "supplyCount": "", "recruitDate": "20260309", "recruitEndDate": "20260311", "winnerDate": "20260317", "moveInDate": "", "constructor": "두산건설 주식회사", "status": "예정", "type59": null, "type84": null}, {"id": "경산 상방공원 호반써밋 1단지20260309", "name": "경산 상방공원 호반써밋 1단지", "location": "", "region": "경북", "supplyCount": "", "recruitDate": "20260309", "recruitEndDate": "20260311", "winnerDate": "20260317", "moveInDate": "", "constructor": "(주)호반건설", "status": "예정", "type59": null, "type84": null}, {"id": "해링턴플레이스 노원 센트럴20260303", "name": "해링턴플레이스 노원 센트럴", "location": "", "region": "서울", "supplyCount": "", "recruitDate": "20260303", "recruitEndDate": "20260306", "winnerDate": "20260312", "moveInDate": "", "constructor": "효성중공업 주식회사", "status": "예정", "type59": null, "type84": null}, {"id": "천안 아이파크 시티 6단지20260303", "name": "천안 아이파크 시티 6단지", "location": "", "region": "충남", "supplyCount": "", "recruitDate": "20260303", "recruitEndDate": "20260305", "winnerDate": "20260312", "moveInDate": "", "constructor": "에이치디씨현대산업개발 주식회사", "status": "예정", "type59": null, "type84": null}, {"id": "천안 아이파크 시티 5단지20260303", "name": "천안 아이파크 시티 5단지", "location": "", "region": "충남", "supplyCount": "", "recruitDate": "20260303", "recruitEndDate": "20260305", "winnerDate": "20260311", "moveInDate": "", "constructor": "에이치디씨현대산업개발 주식회사", "status": "예정", "type59": null, "type84": null}, {"id": "이천시 장호원읍 5년 공공건설임대주택(카사펠리스이천) 임차인모집20260304", "name": "이천시 장호원읍 5년 공공건설임대주택(카사펠리스이천) 임차인모집", "location": "", "region": "경기", "supplyCount": "", "recruitDate": "20260304", "recruitEndDate": "20260306", "winnerDate": "20260312", "moveInDate": "", "constructor": "기해건설(주)", "status": "예정", "type59": null, "type84": null}, {"id": "힐스테이트 오산 더퍼스트(조합원 자격상실 및 제명세대)(2회차)20260303", "name": "힐스테이트 오산 더퍼스트(조합원 자격상실 및 제명세대)(2회차)", "location": "", "region": "경기", "supplyCount": "", "recruitDate": "20260303", "recruitEndDate": "20260304", "winnerDate": "20260310", "moveInDate": "", "constructor": "현대건설(주)", "status": "예정", "type59": null, "type84": null}, {"id": "더 플래티넘 센트럴포레20260223", "name": "더 플래티넘 센트럴포레", "location": "", "region": "경기", "supplyCount": "", "recruitDate": "20260223", "recruitEndDate": "20260225", "winnerDate": "20260304", "moveInDate": "", "constructor": "쌍용건설 주식회사", "status": "예정", "type59": null, "type84": null}, {"id": "금정산 하늘채 루미엘20260224", "name": "금정산 하늘채 루미엘", "location": "", "region": "부산", "supplyCount": "", "recruitDate": "20260224", "recruitEndDate": "20260226", "winnerDate": "20260305", "moveInDate": "", "constructor": "코오롱글로벌(주)", "status": "예정", "type59": null, "type84": null}];
 var NEARBY={"_설명": "단지ID_타입 형식으로 주변시세 입력 (만원 단위). API로 시세 자동수집 불가하여 수동 관리.", "_예시": "123456_84: 80000 = 8억", "_KB시세참고": "https://www.kbland.kr"};
-var region='전체',tabs={},custom={},openC={};
+var region='전체',custom={},openC={};
 function fmt(p){if(!p||p===0)return'미정';p=parseInt(p);if(p>=10000){var u=Math.floor(p/10000),m=p%10000;return m?(u+'억 '+m.toLocaleString()+'만'):(u+'억');}return p.toLocaleString()+'만';}
 function mc(p){return p>=20?'#00ff87':p>=10?'#7df9ff':p>=0?'#ffd700':p>=-5?'#ff9500':'#ff4444';}
 function ml(p){return p>=20?'🔥로또급':p>=10?'✅우량':p>=0?'👍양호':p>=-5?'⚠️주의':'❌손실';}
-function ga(id){return tabs[id]||'84';}
 function setR(r,btn){region=r;document.querySelectorAll('.fb').forEach(function(b){b.classList.remove('on');});btn.classList.add('on');render();}
 function tog(id){openC[id]=!openC[id];render();}
-function setA(id,a){tabs[id]=a;render();}
-function upd(id,a,v){var n=parseInt(v);if(!isNaN(n)&&n>0)custom[id+'_'+a]=n;else delete custom[id+'_'+a];render();}
-function rst(id,a){delete custom[id+'_'+a];render();}
+function upd(id,v){var n=parseInt(v);if(!isNaN(n)&&n>0)custom[id]=n;else delete custom[id];render();}
+function rst(id){delete custom[id];render();}
 function proc(){
   var M=['서울','경기','인천'];
-  return RAW.map(function(apt){
-    var a=ga(apt.id),t=a==='59'?apt.type59:apt.type84;
-    var sp=t?parseInt(t.supplyPrice||0):0;
-    var nk=apt.id+'_'+a;
-    var np=custom[nk]||NEARBY[nk]||NEARBY[apt.id]||0;
-    var diff=np&&sp?np-sp:0;
-    var pct=sp&&np?Math.round((diff/sp)*100):null;
-    var lu=t?parseInt(t.lotteryCount||0):0;
-    var lr=t?parseInt(t.lotteryRatio||0):0;
-    var reg=M.indexOf(apt.region)>=0;
-    return Object.assign({},apt,{a:a,sp:sp,np:np,diff:diff,pct:pct,lu:lu,lr:lr,reg:reg});
-  }).filter(function(s){
-    return region==='전체'||s.region===region||(region==='지방'&&['서울','경기','인천'].indexOf(s.region)<0);
-  }).sort(function(a,b){return(b.pct!=null?b.pct:-999)-(a.pct!=null?a.pct:-999);});
+  return RAW.filter(function(s){
+    if(region==='전체')return true;
+    if(region==='진행중')return s.status==='진행중';
+    if(region==='지방')return M.indexOf(s.region)<0;
+    return s.region===region;
+  });
 }
 function render(){
   var data=proc();
-  document.getElementById('s1').textContent=data.length+'건';
-  var wm=data.filter(function(d){return d.pct!==null;});
-  var avg=wm.length?Math.round(wm.reduce(function(s,d){return s+d.pct;},0)/wm.length):0;
-  document.getElementById('s2').textContent=(avg>0?'+':'')+avg+'%';
-  document.getElementById('s3').textContent=data.filter(function(d){return d.pct>0;}).length+'/'+data.length+'개';
-  document.getElementById('s4').textContent=data.reduce(function(s,d){return s+(d.lu||0);},0).toLocaleString()+'세대';
+  document.getElementById('s1').textContent=RAW.length+'건';
+  document.getElementById('s2').textContent=RAW.filter(function(d){return d.status==='진행중';}).length+'건';
+  var withM=data.filter(function(d){return custom[d.id]&&d.recruitDate;});
+  document.getElementById('s3').textContent=withM.filter(function(d){var np=custom[d.id]||0;return np>0;}).length+'건';
+  document.getElementById('s4').textContent=RAW.filter(function(d){return d.region==='서울';}).length+'건';
   var el=document.getElementById('cards');
-  if(!data.length){el.innerHTML='<div class="nodata">해당 지역 청약 단지 없음</div>';return;}
+  if(!data.length){el.innerHTML='<div class="nodata">해당 지역 단지 없음</div>';return;}
+  var M=['서울','경기','인천'];
   el.innerHTML=data.map(function(apt){
-    var c=apt.pct!==null?mc(apt.pct):'#555';
     var isO=openC[apt.id];
-    var bw=apt.pct!==null?Math.min(100,Math.max(2,apt.pct*2)):0;
-    var curA=apt.a;
-    var warns=apt.reg?['당첨 후 기존 주택 처분조건 확인 필수','추첨: 59m2이하 40% / 84m2이하 30%','분양가상한제 단지 실거주 의무 2~5년','잔금대출 25억초과 최대2억 / 15~25억 최대4억']:['1주택자 1순위 청약 가능 (처분조건 없음)','85m2이하 '+apt.lr+'% 추첨 / 85m2초과 100%','전매제한 없음','실거주 의무 없음'];
+    var reg=M.indexOf(apt.region)>=0;
+    var np=custom[apt.id]||0;
+    var pct=null;
+    var diff=0;
+    var c='#555';
+    if(np>0){
+      diff=np;
+      pct=null;
+      c='#7df9ff';
+    }
+    var warns=reg?['당첨 후 기존 주택 처분조건 공고문 확인 필수','추첨: 59m2이하 40% / 84m2이하 30%','분양가상한제 단지 실거주 의무 2~5년','잔금대출 25억초과 최대2억 / 15~25억 최대4억']:['1주택자 1순위 청약 가능 (처분조건 없음)','85m2이하 60% 추첨 / 85m2초과 100%','전매제한 없음','실거주 의무 없음'];
     var det='';
-    if(isO){det='<div class="detail"><div style="font-size:10px;color:#7df9ff;font-weight:700;margin-bottom:9px">상세 분석</div><div class="dgrid"><div class="dbox"><div class="dlbl">총 세대수</div><div class="dval">'+(apt.supplyCount||'-')+'세대</div></div><div class="dbox"><div class="dlbl">시공사</div><div class="dval">'+(apt.constructor||'-')+'</div></div><div class="dbox"><div class="dlbl">청약접수</div><div class="dval">'+(apt.recruitDate||'-')+'~'+(apt.recruitEndDate||'-')+'</div></div><div class="dbox"><div class="dlbl">당첨발표</div><div class="dval">'+(apt.winnerDate||'-')+'</div></div></div><div class="irow" onclick="event.stopPropagation()"><div class="ihint">주변 시세 입력 (만원)</div><div class="igrp"><input class="cinput" type="number" placeholder="'+(apt.np||'예: 80000')+'" oninput="upd(\''+apt.id+'\',\''+curA+'\',this.value)"/><button class="rbtn" onclick="rst(\''+apt.id+'\',\''+curA+'\')">초기화</button></div></div><div class="wbox" style="background:'+(apt.reg?'rgba(255,68,68,.04)':'rgba(0,255,135,.03)')+';border:1px solid '+(apt.reg?'rgba(255,68,68,.12)':'rgba(0,255,135,.12)')+'"><div class="wtitle" style="color:'+(apt.reg?'#ff8888':'#00ff87')+'">'+(apt.reg?'⚠️ 투기과열 1주택 유의사항':'✅ 비규제 1주택자 혜택')+'</div>'+warns.map(function(w){return'<div class="witem"><span style="color:'+(apt.reg?'#ff8888':'#00ff87')+'">• </span>'+w+'</div>';}).join('')+'</div></div>';}
-    return '<div class="card'+(isO?' open':'')+'" onclick="tog(\''+apt.id+\')">'+'<div class="cglow" style="background:radial-gradient(circle,'+c+'15 0%,transparent 70%)"></div>'+'<div class="chead"><div><div class="cname">'+apt.name+'</div><div class="cloc">'+apt.location+'</div></div><div><span class="badge '+(apt.reg?'bhot':'bsafe')+'">'+(apt.reg?'투기과열':'비규제')+'</span><span class="badge bst">'+apt.status+'</span></div></div>'+'<div class="atabs" onclick="event.stopPropagation()"><button class="atab'+(curA==='59'?' on':'')+'" onclick="setA(\''+apt.id+'\',\'59\')">59m2</button><button class="atab'+(curA==='84'?' on':'')+'" onclick="setA(\''+apt.id+'\',\'84\')">84m2</button></div>'+'<div class="pgrid"><div class="pbox"><div class="plbl">분양가</div><div class="pval">'+fmt(apt.sp)+'</div></div><div class="pbox"><div class="plbl">주변시세</div><div class="pval" style="color:#7df9ff">'+(apt.np?fmt(apt.np):'직접입력')+'</div></div></div>'+'<div><div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="font-size:10px;color:#777">안전마진</span><span style="font-size:11px;font-weight:800;color:'+c+'">'+(apt.pct!==null?(ml(apt.pct)+' '+(apt.pct>0?'+':'')+apt.pct+'%'):'시세 미입력')+'</span></div><div class="mtrack"><div class="mfill" style="width:'+bw+'%;background:linear-gradient(90deg,'+c+'66,'+c+')"></div></div><div style="font-size:10px;color:#444">차익: '+(apt.diff?fmt(apt.diff):'미정')+' / 추첨 '+apt.lu+'세대</div></div>'+'<div class="cfooter"><div class="cdates">입주 '+(apt.moveInDate||'미정')+' / 청약 '+(apt.recruitDate||'미정')+'</div><span class="bdis '+(apt.reg?'yes':'no')+'">'+(apt.reg?'처분조건있음':'처분조건없음')+'</span></div>'+det+'</div>';
+    if(isO){
+      det='<div class="detail">'
+        +'<div style="font-size:10px;color:#7df9ff;font-weight:700;margin-bottom:9px">상세 분석</div>'
+        +'<div class="dgrid">'
+        +'<div class="dbox"><div class="dlbl">지역</div><div class="dval">'+apt.region+'</div></div>'
+        +'<div class="dbox"><div class="dlbl">시공사</div><div class="dval">'+(apt.constructor||'-')+'</div></div>'
+        +'<div class="dbox"><div class="dlbl">청약접수</div><div class="dval">'+apt.recruitDate+'~'+apt.recruitEndDate+'</div></div>'
+        +'<div class="dbox"><div class="dlbl">당첨발표</div><div class="dval">'+(apt.winnerDate||'-')+'</div></div>'
+        +'</div>'
+        +'<div class="irow" onclick="event.stopPropagation()">'
+        +'<div class="ihint">주변 시세 입력 (만원) - 마진 자동 계산</div>'
+        +'<div class="igrp">'
+        +'<input class="cinput" type="number" placeholder="예: 80000 (8억)" oninput="upd(\''+apt.id+'\',this.value)"/>'
+        +'<button class="rbtn" onclick="rst(\''+apt.id+'\')">초기화</button>'
+        +'</div></div>'
+        +'<div class="wbox" style="background:'+(reg?'rgba(255,68,68,.04)':'rgba(0,255,135,.03)')+';border:1px solid '+(reg?'rgba(255,68,68,.12)':'rgba(0,255,135,.12)')+'">'
+        +'<div class="wtitle" style="color:'+(reg?'#ff8888':'#00ff87')+'">'+(reg?'투기과열 1주택 유의사항':'비규제 1주택자 혜택')+'</div>'
+        +warns.map(function(w){return'<div class="witem"><span style="color:'+(reg?'#ff8888':'#00ff87')+'">• </span>'+w+'</div>';}).join('')
+        +'</div></div>';
+    }
+    return '<div class="card'+(isO?' open':'')+'" onclick="tog(\''+apt.id+\')">'
+      +'<div class="cglow" style="background:radial-gradient(circle,'+(apt.status==='진행중'?'#00ff87':'#7df9ff')+'15 0%,transparent 70%)"></div>'
+      +'<div class="chead">'
+      +'<div><div class="cname">'+apt.name+'</div><div class="cloc">'+apt.region+' '+apt.recruitDate+'~'+apt.recruitEndDate+'</div></div>'
+      +'<div><span class="badge '+(reg?'bhot':'bsafe')+'">'+(reg?'투기과열':'비규제')+'</span>'
+      +'<span class="badge '+(apt.status==='진행중'?'bon':'bst')+'">'+apt.status+'</span></div>'
+      +'</div>'
+      +'<div class="pgrid">'
+      +'<div class="pbox"><div class="plbl">시공사</div><div class="pval" style="font-size:11px">'+(apt.constructor||'-')+'</div></div>'
+      +'<div class="pbox"><div class="plbl">당첨발표</div><div class="pval" style="font-size:11px">'+(apt.winnerDate||'-')+'</div></div>'
+      +'</div>'
+      +'<div style="margin-bottom:10px">'
+      +'<div style="display:flex;justify-content:space-between;margin-bottom:3px">'
+      +'<span style="font-size:10px;color:#777">주변시세 입력시 마진 계산</span>'
+      +'<span style="font-size:11px;font-weight:800;color:#7df9ff">'+(np?fmt(np):'시세 미입력')+'</span>'
+      +'</div>'
+      +'<div class="mtrack"><div class="mfill" style="width:'+(np?'60':'0')+'%;background:linear-gradient(90deg,#7df9ff66,#7df9ff)"></div></div>'
+      +'</div>'
+      +'<div class="cfooter">'
+      +'<div class="cdates">모집공고일: '+apt.recruitDate+'</div>'
+      +'<span class="bdis '+(reg?'yes':'no')+'">'+(reg?'처분조건있음':'처분조건없음')+'</span>'
+      +'</div>'
+      +det+'</div>';
   }).join('');
 }
 render();
 </script>
 </body>
 </html>
-
-    
