@@ -1,8 +1,8 @@
 
-“””
+"""
 청약홈 데이터 자동 수집 스크립트
 공공데이터포털 한국부동산원 청약정보 API 사용
-“””
+"""
 import requests
 import json
 import os
