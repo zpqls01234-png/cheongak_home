@@ -1,43 +1,40 @@
-import requests, json, os, xml.etree.ElementTree as ET
+import requests, json, os
 from datetime import datetime, timedelta
 
 API_KEY = os.environ.get("PUBLIC_DATA_API_KEY", "")
-BASE_URL = "http://apis.data.go.kr/B552555/APTLttotPblancDetail"
-
-def g(item, tag):
-    el = item.find(tag)
-    return (el.text or "").strip() if el is not None else ""
+BASE_URL = "https://api.odcloud.kr/api/ApplyhomeInfoDetailSvc/v1"
 
 def fetch_list():
     today = datetime.now()
     try:
-        res = requests.get(BASE_URL + "/getLttotPblancList", params={
+        res = requests.get(BASE_URL + "/getAPTLttotPblancDetail", params={
             "serviceKey": API_KEY,
-            "startMonth": (today - timedelta(days=30)).strftime("%Y%m"),
-            "endMonth": today.strftime("%Y%m"),
-            "numOfRows": "100", "pageNo": "1"
+            "page": "1",
+            "perPage": "100",
         }, timeout=20)
         print("status: " + str(res.status_code))
         print("response: " + res.text[:300])
         if res.status_code != 200:
             return []
-        root = ET.fromstring(res.content)
+        data = res.json()
+        items = data.get("data", [])
         result = []
-        for item in root.findall(".//item"):
-            rb = g(item, "RCEPT_BGNDE")
-            re = g(item, "RCEPT_ENDDE")
-            ts = today.strftime("%Y%m%d")
+        today_str = today.strftime("%Y%m%d")
+        for item in items:
+            rb = str(item.get("RCEPT_BGNDE", "")).replace("-","")
+            re = str(item.get("RCEPT_ENDDE", "")).replace("-","")
             result.append({
-                "id": g(item, "HOUSE_MANAGE_NO"),
-                "name": g(item, "HOUSE_NM"),
-                "location": g(item, "HSSPLY_ADRES"),
-                "region": g(item, "SUBSCRPT_AREA_CODE_NM"),
-                "supplyCount": g(item, "TOT_SUPLY_HSHLDCO"),
-                "recruitDate": rb, "recruitEndDate": re,
-                "winnerDate": g(item, "PRZWNER_PRESNATN_DE"),
-                "moveInDate": g(item, "MOVE_IN_YM"),
-                "constructor": g(item, "BSNS_MBY_NM"),
-                "status": "진행중" if rb <= ts <= re else "예정",
+                "id": str(item.get("HOUSE_MANAGE_NO", "")),
+                "name": item.get("HOUSE_NM", ""),
+                "location": item.get("HSSPLY_ADRES", ""),
+                "region": item.get("SUBSCRPT_AREA_CODE_NM", ""),
+                "supplyCount": str(item.get("TOT_SUPLY_HSHLDCO", "")),
+                "recruitDate": rb,
+                "recruitEndDate": re,
+                "winnerDate": str(item.get("PRZWNER_PRESNATN_DE", "")),
+                "moveInDate": str(item.get("MOVE_IN_YM", "")),
+                "constructor": item.get("BSNS_MBY_NM", ""),
+                "status": "진행중" if rb <= today_str <= re else "예정",
                 "type59": None, "type84": None,
             })
         return result
@@ -47,24 +44,27 @@ def fetch_list():
 
 def fetch_detail(manage_no):
     try:
-        res = requests.get(BASE_URL + "/getLttotPblancDetail", params={
-            "serviceKey": API_KEY, "houseManageNo": manage_no,
-            "numOfRows": "50", "pageNo": "1"
+        res = requests.get(BASE_URL + "/getAPTLttotPblancMdl", params={
+            "serviceKey": API_KEY,
+            "page": "1",
+            "perPage": "50",
+            "cond[HOUSE_MANAGE_NO::EQ]": manage_no,
         }, timeout=20)
         if res.status_code != 200:
             return []
-        root = ET.fromstring(res.content)
+        data = res.json()
+        items = data.get("data", [])
         types = []
-        for item in root.findall(".//item"):
-            lottery = g(item, "CHCSR_HSHLDCO") or "0"
-            supply = g(item, "SUPLY_HSHLDCO") or "1"
-            price_str = g(item, "LTTOT_TOP_AMOUNT")
+        for item in items:
+            lottery = str(item.get("CHCSR_HSHLDCO", "0") or "0")
+            supply = str(item.get("SUPLY_HSHLDCO", "1") or "1")
+            price_str = str(item.get("LTTOT_TOP_AMOUNT", "") or "")
             try: lr = round(int(lottery) / max(int(supply), 1) * 100)
             except: lr = 0
             try: price = int(price_str) * 10000 if price_str else 0
             except: price = 0
             types.append({
-                "area": g(item, "SUPLY_AR"),
+                "area": str(item.get("SUPLY_AR", "")),
                 "supplyCount": supply,
                 "lotteryCount": lottery,
                 "supplyPrice": price,
