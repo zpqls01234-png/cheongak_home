@@ -1,79 +1,71 @@
-import requests, json, os
-from datetime import datetime, timedelta
-
-API_KEY = os.environ.get("PUBLIC_DATA_API_KEY", "")
-BASE_URL = "https://api.odcloud.kr/api/ApplyhomeInfoDetailSvc/v1"
+import requests, json, os, io, csv
+from datetime import datetime
 
 def fetch_list():
-    today = datetime.now()
+    url = "https://www.data.go.kr/cmm/cmm/fileDownload.do?atchFileId=RESULT_0000000000001789&fileDetailSn=1"
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
     try:
-        res = requests.get(BASE_URL + "/getAPTLttotPblancDetail", params={
-            "serviceKey": API_KEY,
-            "page": "1",
-            "perPage": "100",
-        }, timeout=20)
+        res = requests.get(url, headers=headers, timeout=30)
         print("status: " + str(res.status_code))
-        print("response: " + res.text[:300])
-        if res.status_code != 200:
-            return []
-        data = res.json()
-        items = data.get("data", [])
+        content = res.content.decode("cp949", errors="replace")
+        reader = csv.DictReader(io.StringIO(content))
         result = []
+        today = datetime.now()
         today_str = today.strftime("%Y%m%d")
-        for item in items:
-            rb = str(item.get("RCEPT_BGNDE", "")).replace("-","")
-            re = str(item.get("RCEPT_ENDDE", "")).replace("-","")
+        for row in reader:
+            rb = row.get("청약접수시작일", "").replace("-","").replace(".","")
+            re = row.get("청약접수종료일", "").replace("-","").replace(".","")
             result.append({
-                "id": str(item.get("HOUSE_MANAGE_NO", "")),
-                "name": item.get("HOUSE_NM", ""),
-                "location": item.get("HSSPLY_ADRES", ""),
-                "region": item.get("SUBSCRPT_AREA_CODE_NM", ""),
-                "supplyCount": str(item.get("TOT_SUPLY_HSHLDCO", "")),
+                "id": row.get("주택관리번호", ""),
+                "name": row.get("주택명", ""),
+                "location": row.get("공급위치", ""),
+                "region": row.get("공급지역명", ""),
+                "supplyCount": row.get("공급규모", ""),
                 "recruitDate": rb,
                 "recruitEndDate": re,
-                "winnerDate": str(item.get("PRZWNER_PRESNATN_DE", "")),
-                "moveInDate": str(item.get("MOVE_IN_YM", "")),
-                "constructor": item.get("BSNS_MBY_NM", ""),
+                "winnerDate": row.get("당첨자발표일", ""),
+                "moveInDate": row.get("입주예정월", ""),
+                "constructor": row.get("건설업체명(시공사)", ""),
                 "status": "진행중" if rb <= today_str <= re else "예정",
-                "type59": None, "type84": None,
+                "type59": None,
+                "type84": None,
             })
+        print("파싱된 행: " + str(len(result)) + "건")
         return result
     except Exception as e:
-        print("fetch_list 오류: " + str(e))
+        print("오류: " + str(e))
         return []
 
-def fetch_detail(manage_no):
+def fetch_detail_csv():
+    url = "https://www.data.go.kr/cmm/cmm/fileDownload.do?atchFileId=RESULT_0000000000001790&fileDetailSn=1"
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
     try:
-        res = requests.get(BASE_URL + "/getAPTLttotPblancMdl", params={
-            "serviceKey": API_KEY,
-            "page": "1",
-            "perPage": "50",
-            "cond[HOUSE_MANAGE_NO::EQ]": manage_no,
-        }, timeout=20)
-        if res.status_code != 200:
-            return []
-        data = res.json()
-        items = data.get("data", [])
-        types = []
-        for item in items:
-            lottery = str(item.get("CHCSR_HSHLDCO", "0") or "0")
-            supply = str(item.get("SUPLY_HSHLDCO", "1") or "1")
-            price_str = str(item.get("LTTOT_TOP_AMOUNT", "") or "")
+        res = requests.get(url, headers=headers, timeout=30)
+        content = res.content.decode("cp949", errors="replace")
+        reader = csv.DictReader(io.StringIO(content))
+        details = {}
+        for row in reader:
+            mid = row.get("주택관리번호", "")
+            if mid not in details:
+                details[mid] = []
+            lottery = row.get("추첨제세대수", "0") or "0"
+            supply = row.get("일반공급세대수", "1") or "1"
+            price = row.get("분양최고금액", "0") or "0"
             try: lr = round(int(lottery) / max(int(supply), 1) * 100)
             except: lr = 0
-            try: price = int(price_str) * 10000 if price_str else 0
-            except: price = 0
-            types.append({
-                "area": str(item.get("SUPLY_AR", "")),
+            try: p = int(price)
+            except: p = 0
+            details[mid].append({
+                "area": row.get("주택형", ""),
                 "supplyCount": supply,
                 "lotteryCount": lottery,
-                "supplyPrice": price,
+                "supplyPrice": p,
                 "lotteryRatio": lr,
             })
-        return types
+        return details
     except Exception as e:
-        print("fetch_detail 오류: " + str(e))
-        return []
+        print("상세 오류: " + str(e))
+        return {}
 
 if __name__ == "__main__":
     os.makedirs("docs", exist_ok=True)
@@ -86,17 +78,18 @@ if __name__ == "__main__":
     apts = fetch_list()
     print("공고: " + str(len(apts)) + "건")
 
+    details = fetch_detail_csv()
+    print("상세: " + str(len(details)) + "건")
+
     dataset = []
     for apt in apts:
-        try:
-            types = fetch_detail(apt["id"])
-            if not any(int(t.get("lotteryCount","0") or "0") > 0 for t in types):
-                continue
-            apt["type59"] = next((t for t in types if "59" in str(t.get("area",""))), None)
-            apt["type84"] = next((t for t in types if "84" in str(t.get("area",""))), None)
-            dataset.append(apt)
-        except Exception as e:
-            print("처리 오류: " + str(e))
+        mid = apt["id"]
+        types = details.get(mid, [])
+        if not any(int(t.get("lotteryCount","0") or "0") > 0 for t in types):
+            continue
+        apt["type59"] = next((t for t in types if "59" in str(t.get("area",""))), None)
+        apt["type84"] = next((t for t in types if "84" in str(t.get("area",""))), None)
+        dataset.append(apt)
 
     print("추첨물량 단지: " + str(len(dataset)) + "건")
     json.dump(dataset, open("docs/data.json","w",encoding="utf-8"), ensure_ascii=False, indent=2)
