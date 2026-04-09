@@ -33,7 +33,7 @@ def fetch_list():
                 if not name or not region or len(region) > 5:
                     continue
                 result.append({
-                    "id": name + rb,
+                    "id": "apt"+str(len(result)),
                     "name": name,
                     "location": "",
                     "region": region,
