@@ -34,6 +34,8 @@ struct ContentView: View {
         _hapticEnabled = State(initialValue: s.hapticFeedbackEnabled)
     }
 
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+
     var body: some View {
         List {
             // Section 1: Keyboard Setup

@@ -23,11 +23,15 @@ class KeyboardViewController: UIInputViewController {
     /// Height constraint for the translation bar container
     private var barHeightConstraint: NSLayoutConstraint?
 
+    /// Next keyboard button for iPad (globe icon)
+    private var nextKeyboardButton: UIButton?
+
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTranslationBar()
+        setupNextKeyboardButton()
         setupTranslationService()
         hapticGenerator.prepare()
     }
@@ -43,6 +47,17 @@ class KeyboardViewController: UIInputViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         translationService.cancel()
+    }
+
+    override func viewWillTransition(
+        to size: CGSize,
+        with coordinator: UIViewControllerTransitionCoordinator
+    ) {
+        super.viewWillTransition(to: size, with: coordinator)
+        // Update bar height on rotation (iPad landscape/portrait)
+        coordinator.animate(alongsideTransition: { _ in
+            self.barHeightConstraint?.constant = TranslationBarView.barHeight
+        })
     }
 
     // MARK: - Setup
@@ -78,6 +93,38 @@ class KeyboardViewController: UIInputViewController {
             translationBar.topAnchor.constraint(equalTo: barContainer.topAnchor),
             translationBar.bottomAnchor.constraint(equalTo: barContainer.bottomAnchor),
         ])
+    }
+
+    /// Add a globe/next-keyboard button so users can switch keyboards.
+    /// This is especially important on iPad where the system may not
+    /// show the globe key automatically for custom keyboards.
+    private func setupNextKeyboardButton() {
+        guard needsInputModeSwitchKey else { return }
+
+        let button = UIButton(type: .system)
+        button.setImage(
+            UIImage(systemName: "globe"),
+            for: .normal
+        )
+        button.tintColor = .label
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.sizeToFit()
+
+        // Wire the system-provided action for switching keyboards
+        button.addTarget(
+            self,
+            action: #selector(handleInputModeList(from:with:)),
+            for: .allTouchEvents
+        )
+
+        view.addSubview(button)
+        NSLayoutConstraint.activate([
+            button.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
+            button.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -4),
+            button.widthAnchor.constraint(equalToConstant: 32),
+            button.heightAnchor.constraint(equalToConstant: 32),
+        ])
+        nextKeyboardButton = button
     }
 
     private func setupTranslationService() {

@@ -14,18 +14,29 @@ final class TranslationBarView: UIView {
 
     // MARK: - Constants
 
-    static let barHeight: CGFloat = 44
+    /// Adaptive bar height: taller on iPad for better tap targets
+    static var barHeight: CGFloat {
+        UIDevice.current.userInterfaceIdiom == .pad ? 50 : 44
+    }
+
+    private static var isIPad: Bool {
+        UIDevice.current.userInterfaceIdiom == .pad
+    }
 
     private enum Layout {
         static let buttonCornerRadius: CGFloat = 8
-        static let buttonHorizontalPadding: CGFloat = 12
-        static let buttonVerticalPadding: CGFloat = 6
-        static let flagTextSpacing: CGFloat = 4
+        static let buttonHorizontalPadding: CGFloat = isIPad ? 20 : 12
+        static let buttonVerticalPadding: CGFloat = isIPad ? 8 : 6
+        static let flagTextSpacing: CGFloat = isIPad ? 6 : 4
         static let separatorWidth: CGFloat = 0.5
-        static let translationFontSize: CGFloat = 14
-        static let labelFontSize: CGFloat = 12
-        static let settingsButtonWidth: CGFloat = 44
+        static let translationFontSize: CGFloat = isIPad ? 16 : 14
+        static let labelFontSize: CGFloat = isIPad ? 14 : 12
+        static let settingsButtonWidth: CGFloat = isIPad ? 50 : 44
         static let bottomSeparatorHeight: CGFloat = 0.5
+
+        private static var isIPad: Bool {
+            UIDevice.current.userInterfaceIdiom == .pad
+        }
     }
 
     // MARK: - Properties
@@ -335,20 +346,22 @@ private final class TranslationButton: UIView {
         highlightView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(highlightView)
 
+        let isIPad = UIDevice.current.userInterfaceIdiom == .pad
+
         // Flag label
         flagLabel.text = result.language.flagEmoji
-        flagLabel.font = .systemFont(ofSize: 16)
+        flagLabel.font = .systemFont(ofSize: isIPad ? 20 : 16)
         flagLabel.setContentHuggingPriority(.required, for: .horizontal)
 
         // Translation text label
         textLabel.text = result.translatedText
-        textLabel.font = .systemFont(ofSize: 14, weight: .medium)
+        textLabel.font = .systemFont(ofSize: isIPad ? 16 : 14, weight: .medium)
         textLabel.textColor = .label
         textLabel.lineBreakMode = .byTruncatingTail
 
         // Container stack
         containerStack.axis = .horizontal
-        containerStack.spacing = 4
+        containerStack.spacing = isIPad ? 6 : 4
         containerStack.alignment = .center
         containerStack.translatesAutoresizingMaskIntoConstraints = false
         containerStack.addArrangedSubview(flagLabel)
