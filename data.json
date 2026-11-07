@@ -1,6 +1,66 @@
 [
   {
     "id": "apt0",
+    "name": "시흥 거모 아테라(시흥거모 A-6BL) 신혼희망타운(공공분양)(본청약)",
+    "location": "",
+    "region": "경기",
+    "supplyCount": "",
+    "recruitDate": "20261116",
+    "recruitEndDate": "20261127",
+    "winnerDate": "20261208",
+    "moveInDate": "",
+    "constructor": "금호건설 주식회사",
+    "status": "예정",
+    "type59": null,
+    "type84": null
+  },
+  {
+    "id": "apt1",
+    "name": "제일풍경채 광주 포에듀",
+    "location": "",
+    "region": "경기",
+    "supplyCount": "",
+    "recruitDate": "20261116",
+    "recruitEndDate": "20261118",
+    "winnerDate": "20261124",
+    "moveInDate": "",
+    "constructor": "제일건설 주식회사",
+    "status": "예정",
+    "type59": null,
+    "type84": null
+  },
+  {
+    "id": "apt2",
+    "name": "의정부역 펠리스타워 양우내안애",
+    "location": "",
+    "region": "경기",
+    "supplyCount": "",
+    "recruitDate": "20261116",
+    "recruitEndDate": "20261118",
+    "winnerDate": "20261124",
+    "moveInDate": "",
+    "constructor": "양우건설(주)",
+    "status": "예정",
+    "type59": null,
+    "type84": null
+  },
+  {
+    "id": "apt3",
+    "name": "중화역 라온프라이빗 센트로",
+    "location": "",
+    "region": "서울",
+    "supplyCount": "",
+    "recruitDate": "20261116",
+    "recruitEndDate": "20261119",
+    "winnerDate": "20261125",
+    "moveInDate": "",
+    "constructor": "라온건설(주)",
+    "status": "예정",
+    "type59": null,
+    "type84": null
+  },
+  {
+    "id": "apt4",
     "name": "리첼 에듀포레 경산역",
     "location": "",
     "region": "경북",
@@ -15,7 +75,7 @@
     "type84": null
   },
   {
-    "id": "apt1",
+    "id": "apt5",
     "name": "안산신길2 A-6블록 신혼희망타운(공공분양)(본청약)",
     "location": "",
     "region": "경기",
@@ -30,7 +90,7 @@
     "type84": null
   },
   {
-    "id": "apt2",
+    "id": "apt6",
     "name": "남춘천 센트레빌",
     "location": "",
     "region": "강원",
@@ -45,7 +105,7 @@
     "type84": null
   },
   {
-    "id": "apt3",
+    "id": "apt7",
     "name": "안산신길2지구 B-1블록 공공분양주택(본청약)",
     "location": "",
     "region": "경기",
@@ -60,7 +120,7 @@
     "type84": null
   },
   {
-    "id": "apt4",
+    "id": "apt8",
     "name": "광교 자연앤 센트레빌(A17BL) 공공분양주택",
     "location": "",
     "region": "경기",
@@ -75,7 +135,7 @@
     "type84": null
   },
   {
-    "id": "apt5",
+    "id": "apt9",
     "name": "광교 자연앤 센트레빌(A17BL) 지분적립형 분양주택",
     "location": "",
     "region": "경기",
@@ -90,7 +150,7 @@
     "type84": null
   },
   {
-    "id": "apt6",
+    "id": "apt10",
     "name": "형곡 센트럴 아테라",
     "location": "",
     "region": "경북",
@@ -105,7 +165,7 @@
     "type84": null
   },
   {
-    "id": "apt7",
+    "id": "apt11",
     "name": "평택 고덕 우미 린 더 프리미어",
     "location": "",
     "region": "경기",
@@ -120,7 +180,7 @@
     "type84": null
   },
   {
-    "id": "apt8",
+    "id": "apt12",
     "name": "구리갈매역세권 B-1블록 신안인스빌 디센트",
     "location": "",
     "region": "경기",
@@ -135,7 +195,7 @@
     "type84": null
   },
   {
-    "id": "apt9",
+    "id": "apt13",
     "name": "중앙하이츠 구성 플랫폼시티",
     "location": "",
     "region": "경기",
@@ -150,7 +210,7 @@
     "type84": null
   },
   {
-    "id": "apt10",
+    "id": "apt14",
     "name": "엘리프 시흥 더프라임",
     "location": "",
     "region": "경기",
@@ -165,7 +225,7 @@
     "type84": null
   },
   {
-    "id": "apt11",
+    "id": "apt15",
     "name": "한화포레나 지제역",
     "location": "",
     "region": "경기",
@@ -180,7 +240,7 @@
     "type84": null
   },
   {
-    "id": "apt12",
+    "id": "apt16",
     "name": "삼도이동 2지구 토지임대부 공공분양주택",
     "location": "",
     "region": "제주",
@@ -195,7 +255,7 @@
     "type84": null
   },
   {
-    "id": "apt13",
+    "id": "apt17",
     "name": "삼도이동 1지구 토지임대부 공공분양주택",
     "location": "",
     "region": "제주",
@@ -210,7 +270,7 @@
     "type84": null
   },
   {
-    "id": "apt14",
+    "id": "apt18",
     "name": "계양신도시 카이브 유보라(AC4BL)",
     "location": "",
     "region": "인천",
@@ -225,7 +285,7 @@
     "type84": null
   },
   {
-    "id": "apt15",
+    "id": "apt19",
     "name": "시흥거모지구 S-1블록 공공분양(본청약)",
     "location": "",
     "region": "경기",
@@ -240,7 +300,7 @@
     "type84": null
   },
   {
-    "id": "apt16",
+    "id": "apt20",
     "name": "계양신도시 카이브 유보라(AC3BL)",
     "location": "",
     "region": "인천",
@@ -255,7 +315,7 @@
     "type84": null
   },
   {
-    "id": "apt17",
+    "id": "apt21",
     "name": "GTX운정중앙역 시티프라디움 4단지(후속사업)",
     "location": "",
     "region": "경기",
@@ -270,7 +330,7 @@
     "type84": null
   },
   {
-    "id": "apt18",
+    "id": "apt22",
     "name": "GTX운정중앙역 시티프라디움 3단지(후속사업)",
     "location": "",
     "region": "경기",
@@ -285,7 +345,7 @@
     "type84": null
   },
   {
-    "id": "apt19",
+    "id": "apt23",
     "name": "청라 아크원 푸르지오",
     "location": "",
     "region": "인천",
@@ -300,7 +360,7 @@
     "type84": null
   },
   {
-    "id": "apt20",
+    "id": "apt24",
     "name": "화성 향남 롯데캐슬 시그니처",
     "location": "",
     "region": "경기",
@@ -315,7 +375,7 @@
     "type84": null
   },
   {
-    "id": "apt21",
+    "id": "apt25",
     "name": "트리븐센텀 2단지",
     "location": "",
     "region": "부산",
@@ -330,7 +390,7 @@
     "type84": null
   },
   {
-    "id": "apt22",
+    "id": "apt26",
     "name": "트리븐센텀 1단지",
     "location": "",
     "region": "부산",
@@ -345,7 +405,7 @@
     "type84": null
   },
   {
-    "id": "apt23",
+    "id": "apt27",
     "name": "아크메르 동탄 99",
     "location": "",
     "region": "경기",
@@ -360,7 +420,7 @@
     "type84": null
   },
   {
-    "id": "apt24",
+    "id": "apt28",
     "name": "아크메르 동탄 95",
     "location": "",
     "region": "경기",
@@ -375,7 +435,7 @@
     "type84": null
   },
   {
-    "id": "apt25",
+    "id": "apt29",
     "name": "광안센텀 비스타동원(조합원 취소분)",
     "location": "",
     "region": "부산",
@@ -390,7 +450,7 @@
     "type84": null
   },
   {
-    "id": "apt26",
+    "id": "apt30",
     "name": "연산 센텀 월드메르디앙",
     "location": "",
     "region": "부산",
@@ -405,7 +465,7 @@
     "type84": null
   },
   {
-    "id": "apt27",
+    "id": "apt31",
     "name": "고덕강일지구 3단지 토지임대부(본청약)",
     "location": "",
     "region": "서울",
@@ -415,12 +475,12 @@
     "winnerDate": "20261126",
     "moveInDate": "",
     "constructor": "에이치에스화성(주), (주)서해종합건설, 홍문종합건설(주)",
-    "status": "진행중",
+    "status": "예정",
     "type59": null,
     "type84": null
   },
   {
-    "id": "apt28",
+    "id": "apt32",
     "name": "신분평 에피트 더웨이시티",
     "location": "",
     "region": "충북",
@@ -435,7 +495,7 @@
     "type84": null
   },
   {
-    "id": "apt29",
+    "id": "apt33",
     "name": "청주 가경 아이파크 8단지",
     "location": "",
     "region": "충북",
@@ -450,7 +510,7 @@
     "type84": null
   },
   {
-    "id": "apt30",
+    "id": "apt34",
     "name": "청주 가경 아이파크 7단지",
     "location": "",
     "region": "충북",
@@ -465,7 +525,7 @@
     "type84": null
   },
   {
-    "id": "apt31",
+    "id": "apt35",
     "name": "한양립스 에듀포레(조합원 취소분)",
     "location": "",
     "region": "광주",
@@ -480,7 +540,7 @@
     "type84": null
   },
   {
-    "id": "apt32",
+    "id": "apt36",
     "name": "연제갤러리자이",
     "location": "",
     "region": "부산",
@@ -495,7 +555,7 @@
     "type84": null
   },
   {
-    "id": "apt33",
+    "id": "apt37",
     "name": "진도 승원팰리체 더 테라스",
     "location": "",
     "region": "전남",
@@ -510,7 +570,7 @@
     "type84": null
   },
   {
-    "id": "apt34",
+    "id": "apt38",
     "name": "힐스테이트 거제시그니처(1회차)",
     "location": "",
     "region": "경남",
@@ -525,7 +585,7 @@
     "type84": null
   },
   {
-    "id": "apt35",
+    "id": "apt39",
     "name": "산곡역자이힐스테이트앤하늘채",
     "location": "",
     "region": "인천",
@@ -540,7 +600,7 @@
     "type84": null
   },
   {
-    "id": "apt36",
+    "id": "apt40",
     "name": "익산 부송에코르 10년 공공임대주택",
     "location": "",
     "region": "전북",
@@ -555,7 +615,7 @@
     "type84": null
   },
   {
-    "id": "apt37",
+    "id": "apt41",
     "name": "아산 그랑시티필하우스",
     "location": "",
     "region": "충남",
@@ -570,7 +630,7 @@
     "type84": null
   },
   {
-    "id": "apt38",
+    "id": "apt42",
     "name": "천안 아이파크 시티 2단지(2회차)",
     "location": "",
     "region": "충남",
@@ -585,7 +645,7 @@
     "type84": null
   },
   {
-    "id": "apt39",
+    "id": "apt43",
     "name": "더샵 동인센트리체",
     "location": "",
     "region": "대구",
@@ -600,7 +660,7 @@
     "type84": null
   },
   {
-    "id": "apt40",
+    "id": "apt44",
     "name": "쌍용 더 플래티넘 한강",
     "location": "",
     "region": "경기",
@@ -615,7 +675,7 @@
     "type84": null
   },
   {
-    "id": "apt41",
+    "id": "apt45",
     "name": "향남역 그로브 스위첸",
     "location": "",
     "region": "경기",
@@ -630,7 +690,7 @@
     "type84": null
   },
   {
-    "id": "apt42",
+    "id": "apt46",
     "name": "제주시 이도이동 아이린8차 아파트",
     "location": "",
     "region": "제주",
@@ -645,7 +705,7 @@
     "type84": null
   },
   {
-    "id": "apt43",
+    "id": "apt47",
     "name": "용인 양지 서희스타힐스 하이뷰 (조합원 취소분)",
     "location": "",
     "region": "경기",
@@ -660,7 +720,7 @@
     "type84": null
   },
   {
-    "id": "apt44",
+    "id": "apt48",
     "name": "인천계양 A17블록 신혼희망타운(공공분양)(본청약)",
     "location": "",
     "region": "인천",
@@ -675,7 +735,7 @@
     "type84": null
   },
   {
-    "id": "apt45",
+    "id": "apt49",
     "name": "광명 시티프라디움 에듀하임",
     "location": "",
     "region": "경기",
@@ -685,66 +745,6 @@
     "winnerDate": "20261012",
     "moveInDate": "",
     "constructor": "(주)시티건설, (주)시티종합건설, (주)시티",
-    "status": "예정",
-    "type59": null,
-    "type84": null
-  },
-  {
-    "id": "apt46",
-    "name": "숭의역 노르웨이숲 더 스카이",
-    "location": "",
-    "region": "인천",
-    "supplyCount": "",
-    "recruitDate": "20260928",
-    "recruitEndDate": "20260930",
-    "winnerDate": "20261007",
-    "moveInDate": "",
-    "constructor": "주식회사 유림E&amp;C",
-    "status": "예정",
-    "type59": null,
-    "type84": null
-  },
-  {
-    "id": "apt47",
-    "name": "진주 판문지구 레이크써밋 웰가",
-    "location": "",
-    "region": "경남",
-    "supplyCount": "",
-    "recruitDate": "20260928",
-    "recruitEndDate": "20260930",
-    "winnerDate": "20261008",
-    "moveInDate": "",
-    "constructor": "흥한주택종합건설(주)",
-    "status": "예정",
-    "type59": null,
-    "type84": null
-  },
-  {
-    "id": "apt48",
-    "name": "삼천 하늘채 라비엘",
-    "location": "",
-    "region": "전북",
-    "supplyCount": "",
-    "recruitDate": "20260928",
-    "recruitEndDate": "20260930",
-    "winnerDate": "20261007",
-    "moveInDate": "",
-    "constructor": "코오롱글로벌 주식회사",
-    "status": "예정",
-    "type59": null,
-    "type84": null
-  },
-  {
-    "id": "apt49",
-    "name": "에코델타시티 금강펜테리움 에코리버",
-    "location": "",
-    "region": "부산",
-    "supplyCount": "",
-    "recruitDate": "20260928",
-    "recruitEndDate": "20260930",
-    "winnerDate": "20261007",
-    "moveInDate": "",
-    "constructor": "(주)금강주택",
     "status": "예정",
     "type59": null,
     "type84": null
